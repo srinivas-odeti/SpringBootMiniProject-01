@@ -2,7 +2,9 @@ package com.cnu.service;
 
 import java.util.List;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
 import com.cnu.entity.CitizenPlan;
@@ -31,7 +33,9 @@ public class CitizenServiceImpl implements CitizenService {
 	@Override
 	public List<CitizenPlan> search(SearchRequest request) {
 		
-		return null;
+		
+		
+		return planRepo.findAll();
 	}
 
 	@Override

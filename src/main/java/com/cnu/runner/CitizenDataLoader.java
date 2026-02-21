@@ -27,6 +27,7 @@ public class CitizenDataLoader implements ApplicationRunner {
 		c1.setCitizenName("John");
 		c1.setGender("Male");
 		c1.setPlanName("Cash");
+		c1.setPlanStatus("Approved");
 		c1.setPlanStartDate(LocalDate.now());
 		c1.setPlanEndDate(LocalDate.now().plusMonths(6));
 		c1.setBenefitAmt(5000.00);
@@ -53,6 +54,7 @@ public class CitizenDataLoader implements ApplicationRunner {
 		c4.setCitizenName("Tim");
 		c4.setGender("Male");
 		c4.setPlanName("Medical");
+		c4.setPlanStatus("Approved");
 		c4.setPlanStartDate(LocalDate.now());
 		c4.setPlanEndDate(LocalDate.now().plusMonths(6));
 		c4.setBenefitAmt(5000.00);
