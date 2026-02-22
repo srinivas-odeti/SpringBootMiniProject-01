@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import com.cnu.entity.CitizenPlan;
@@ -22,19 +23,20 @@ public class CitizenController {
 	@GetMapping("/")
 	public String indexPage(Model model)
 	{
-		 
+		model.addAttribute("search", new SearchRequest());
 		init(model);
 		return "index";
 	}
 
 	private void init(Model model) {
-		model.addAttribute("search", new SearchRequest());
+		//Reloading new form for every search request object
+		//model.addAttribute("search", new SearchRequest());
 		model.addAttribute("names", service.showPlanNames());
 		model.addAttribute("status", service.showPlanStatus());
 	}
 	
 	@PostMapping("/search")
-	public String search(SearchRequest request, Model model)
+	public String search(@ModelAttribute("search") SearchRequest request, Model model)
 	{
 		System.out.println(request);
 		List<CitizenPlan> plans = service.search(request);

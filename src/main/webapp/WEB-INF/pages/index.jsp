@@ -52,7 +52,6 @@
 		                    	<form:option value="Female">Female</form:option>
 		                    </form:select>
 		                </td>
-		                
 		            </tr>
 		            <tr>
 		            	<td>Start Date:</td>
@@ -63,16 +62,13 @@
 		            	<td>
 		            		<form:input type="date" path="endDate"/>
 		            	</td>
-		            	
-		            </tr>
+		           </tr>
 		            <tr>
+		            	<td><a href="/" class="btn btn-secondary">Reset</a></td>
 		            	<td>
 		            		<input type="submit" value="search" class="btn btn-primary"/>
 		            	</td>
 		            </tr>
-		            
-		            
-		            
 				</table>
 
 		
@@ -85,6 +81,7 @@
 						<th>Id</th>
 						<th>Holder Name</th>
 						<th>Plan Name</th>
+						<th>Gender</th>
 						<th>Plan Status</th>
 						<th>Start Date</th>
 						<th>End Date</th>
@@ -96,11 +93,20 @@
             <td>${index.count}</td>
             <td>${plan.citizenName}</td>
             <td>${plan.planName}</td>
+            <td>${plan.gender}</td>
             <td>${plan.planStatus}</td>
             <td>${plan.planStartDate}</td>
             <td>${plan.planEndDate}</td>
         </tr>
     </c:forEach>
+    <tr>
+    	<td>
+    		<c:if test="${empty plans }">
+    			<td colspan="7" style="text-align: center"> No records founds</td>
+    		</c:if>
+    	</td>
+    </tr>
+        
 </tbody>
 				
 			</table>

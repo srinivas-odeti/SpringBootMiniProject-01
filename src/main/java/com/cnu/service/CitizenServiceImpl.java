@@ -32,10 +32,28 @@ public class CitizenServiceImpl implements CitizenService {
 
 	@Override
 	public List<CitizenPlan> search(SearchRequest request) {
+		CitizenPlan entity = new CitizenPlan();
 		
+		if(null!=request.getPlanName() && !"".equals(request.getPlanName())){
+			entity.setPlanName(request.getPlanName());
+		}
 		
+		if(null!=request.getPlanStatus() && !"".equals(request.getPlanStatus())){
+			entity.setPlanStatus(request.getPlanStatus());
+		}
 		
-		return planRepo.findAll();
+		if(null!=request.getGender() && !"".equals(request.getGender())){
+			entity.setGender(request.getGender());
+		}
+		
+		if(null!=request.getStartDate() && !"".equals(request.getStartDate())){
+			entity.setPlanStartDate(request.getStartDate());
+		}
+		
+		if(null!=request.getEndDate() && !"".equals(request.getEndDate())){
+			entity.setPlanEndDate(request.getEndDate());
+		}
+		return planRepo.findAll(Example.of(entity));
 	}
 
 	@Override
