@@ -14,6 +14,8 @@ import com.cnu.entity.CitizenPlan;
 import com.cnu.search.SearchRequest;
 import com.cnu.service.CitizenService;
 
+import jakarta.servlet.http.HttpServletResponse;
+
 @Controller
 public class CitizenController {
 	
@@ -43,6 +45,22 @@ public class CitizenController {
 		model.addAttribute("plans", plans);
 		init(model);
 		return "index";
+	}
+	
+	@GetMapping("/excel")
+	public void excelExport(HttpServletResponse response) throws Exception {
+		response.setContentType("appliction/octet-stream");
+		response.addHeader("content-Disposition", "attachment; filename=plans.xls");
+		
+		service.exportExcel(response);
+	}
+	
+	@GetMapping("/pdf")
+	public void pdfExport(HttpServletResponse response) throws Exception {
+		response.setContentType("appliction/pdf");
+		response.addHeader("content-Disposition", "attachment; filename=plans.pdf");
+		
+		service.exportPdf(response);
 	}
 
 }

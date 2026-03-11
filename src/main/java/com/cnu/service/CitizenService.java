@@ -5,6 +5,8 @@ import java.util.List;
 import com.cnu.entity.CitizenPlan;
 import com.cnu.search.SearchRequest;
 
+import jakarta.servlet.http.HttpServletResponse;
+
 public interface CitizenService {
 
 	public List<String> showPlanNames();
@@ -13,7 +15,7 @@ public interface CitizenService {
 	
 	public List<CitizenPlan> search(SearchRequest request);
 	
-	public boolean exportExcel();
+	public boolean exportExcel(HttpServletResponse response) throws Exception;
 	
-	public boolean exportPdf();
+	public boolean exportPdf(HttpServletResponse response) throws Exception;
 }
