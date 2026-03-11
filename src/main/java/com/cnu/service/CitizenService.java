@@ -15,7 +15,9 @@ public interface CitizenService {
 	
 	public List<CitizenPlan> search(SearchRequest request);
 	
-	public boolean exportExcel(HttpServletResponse response) throws Exception;
-	
-	public boolean exportPdf(HttpServletResponse response) throws Exception;
+	public boolean exportExcel(HttpServletResponse response,
+            List<CitizenPlan> plans) throws Exception;
+
+	public boolean exportPdf(HttpServletResponse response,
+          List<CitizenPlan> plans) throws Exception;
 }

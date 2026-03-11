@@ -14,7 +14,6 @@ import com.cnu.entity.CitizenPlan;
 import com.cnu.repo.CitizenPlanRepo;
 import com.cnu.search.SearchRequest;
 import com.itextpdf.text.Document;
-import com.itextpdf.text.*;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.FontFactory;
 import com.itextpdf.text.PageSize;
@@ -71,8 +70,8 @@ public class CitizenServiceImpl implements CitizenService {
 	}
 
 	@Override
-	public boolean exportExcel(HttpServletResponse response) throws Exception {
-				
+	public boolean exportExcel(HttpServletResponse response, List<CitizenPlan> plans) throws Exception {
+			    
 		Workbook workbook = new HSSFWorkbook();
 		Sheet sheet = workbook.createSheet("plan-data");
 		Row headerRow = sheet.createRow(0);
@@ -85,11 +84,9 @@ public class CitizenServiceImpl implements CitizenService {
 		headerRow.createCell(5).setCellValue("Plan Start Date");
 		headerRow.createCell(6).setCellValue("Plan End Date");
 		
-		List<CitizenPlan> records = planRepo.findAll();
-		
 		int dataRowIndex=1;
 		
-		for(CitizenPlan plan:records){
+		for(CitizenPlan plan:plans){
 			Row dataRow = sheet.createRow(dataRowIndex);
 			dataRow.createCell(0).setCellValue(plan.getCitizenId());
 			dataRow.createCell(1).setCellValue(plan.getCitizenName());
@@ -102,19 +99,15 @@ public class CitizenServiceImpl implements CitizenService {
 				dataRow.createCell(5).setCellValue("N/A");
 			}
 			
-			if(null!= plan.getPlanStartDate()){
+			if(null!= plan.getPlanEndDate()){
 				dataRow.createCell(6).setCellValue(plan.getPlanEndDate()+"");
 			} else {
 				dataRow.createCell(6).setCellValue("N/A");
 			}
 			
-			
-			
 			dataRowIndex++;
 		}
 		
-//		FileOutputStream fos = new FileOutputStream("plans.xls");
-//		workbook.write(fos);
 		
 		ServletOutputStream outputStream = response.getOutputStream();
 		workbook.write(outputStream);
@@ -124,65 +117,49 @@ public class CitizenServiceImpl implements CitizenService {
 	}
 
 	@Override
-	public boolean exportPdf(HttpServletResponse response) throws Exception {
-		
-		Document document = new Document(PageSize.A4);
-		
-		 PdfWriter.getInstance(document, response.getOutputStream());
+	public boolean exportPdf(HttpServletResponse response, List<CitizenPlan> plans) throws Exception {
 
-		    document.open();
+	    Document document = new Document(PageSize.A4);
+	    PdfWriter.getInstance(document, response.getOutputStream());
 
-		    Font fontTitle = FontFactory.getFont(FontFactory.HELVETICA_BOLD);
-		    fontTitle.setSize(18);
+	    document.open();
 
-		    Paragraph title = new Paragraph("Citizen Plans Info", fontTitle);
-		    title.setAlignment(Paragraph.ALIGN_CENTER);
+	    Font fontTitle = FontFactory.getFont(FontFactory.HELVETICA_BOLD);
+	    fontTitle.setSize(18);
 
-		    document.add(title);
+	    Paragraph title = new Paragraph("Citizen Plans Info", fontTitle);
+	    title.setAlignment(Paragraph.ALIGN_CENTER);
 
-		    PdfPTable table = new PdfPTable(7);
-		    
-		    table.setWidthPercentage(100f);
-		    table.setSpacingBefore(5);
-		    
-		    table.addCell("ID");
-		    table.addCell("Citizen Name");
-		    table.addCell("Plan Name");
-		    table.addCell("Plan Status");
-		    table.addCell("Gender");
-		    table.addCell("Start Date");
-		    table.addCell("End Date");
-		    
-		    List<CitizenPlan> plans = planRepo.findAll();
-		    
-		    for(CitizenPlan plan : plans) {
-		    	
-		    	table.addCell(String.valueOf(plan.getCitizenId()));
-			    table.addCell(plan.getCitizenName());
-			    table.addCell(plan.getPlanName());
-			    table.addCell(plan.getPlanStatus());
-			    table.addCell(plan.getGender());
-			    
-			    if(null!=plan.getPlanStartDate()) {
-			    	table.addCell(plan.getPlanStartDate()+"");
-			    } else {
-			    	table.addCell("N/A");
-			    }
-			    
-			    if(null!=plan.getPlanEndDate()) {
-			    	table.addCell(plan.getPlanEndDate()+"");
-			    } else {
-			    	table.addCell("N/A");
-			    }
-			    
-		    }
-		    
-		    document.add(table);
-		    document.close();
+	    document.add(title);
 
-		    return true;
+	    PdfPTable table = new PdfPTable(7);
+	    table.setWidthPercentage(100);
+	    table.setSpacingBefore(10);
+
+	    table.addCell("ID");
+	    table.addCell("Citizen Name");
+	    table.addCell("Plan Name");
+	    table.addCell("Plan Status");
+	    table.addCell("Gender");
+	    table.addCell("Start Date");
+	    table.addCell("End Date");
+
+	    for (CitizenPlan plan : plans) {
+
+	        table.addCell(String.valueOf(plan.getCitizenId()));
+	        table.addCell(plan.getCitizenName());
+	        table.addCell(plan.getPlanName());
+	        table.addCell(plan.getPlanStatus());
+	        table.addCell(plan.getGender());
+
+	        table.addCell(plan.getPlanStartDate() != null ? plan.getPlanStartDate().toString() : "N/A");
+	        table.addCell(plan.getPlanEndDate() != null ? plan.getPlanEndDate().toString() : "N/A");
+	    }
+
+	    document.add(table);
+	    document.close();
+
+	    return true;
 	}
-
-	
 	
 }

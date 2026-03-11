@@ -15,6 +15,7 @@ import com.cnu.search.SearchRequest;
 import com.cnu.service.CitizenService;
 
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class CitizenController {
@@ -38,29 +39,39 @@ public class CitizenController {
 	}
 	
 	@PostMapping("/search")
-	public String search(@ModelAttribute("search") SearchRequest request, Model model)
+	public String search(@ModelAttribute("search") SearchRequest request, Model model, HttpSession session)
 	{
 		System.out.println(request);
 		List<CitizenPlan> plans = service.search(request);
+		
 		model.addAttribute("plans", plans);
+		
+		session.setAttribute("plans", plans);
+		
 		init(model);
+		
 		return "index";
 	}
 	
 	@GetMapping("/excel")
-	public void excelExport(HttpServletResponse response) throws Exception {
-		response.setContentType("appliction/octet-stream");
+	public void excelExport(HttpServletResponse response, HttpSession session) throws Exception {
+		response.setContentType("application/octet-stream");
 		response.addHeader("content-Disposition", "attachment; filename=plans.xls");
 		
-		service.exportExcel(response);
+		List<CitizenPlan> plans = (List<CitizenPlan>) session.getAttribute("plans");
+		
+		service.exportExcel(response, plans);
 	}
 	
+	
 	@GetMapping("/pdf")
-	public void pdfExport(HttpServletResponse response) throws Exception {
-		response.setContentType("appliction/pdf");
+	public void pdfExport(HttpServletResponse response, HttpSession session) throws Exception {
+		response.setContentType("application/pdf");
 		response.addHeader("content-Disposition", "attachment; filename=plans.pdf");
 		
-		service.exportPdf(response);
+		List<CitizenPlan> plans = (List<CitizenPlan>) session.getAttribute("plans");
+		
+		service.exportPdf(response, plans);
 	}
 
 }
