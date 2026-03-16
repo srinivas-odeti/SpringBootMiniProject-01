@@ -56,9 +56,13 @@ public class CitizenController {
 	@GetMapping("/excel")
 	public void excelExport(HttpServletResponse response, HttpSession session) throws Exception {
 		response.setContentType("application/octet-stream");
-		response.addHeader("content-Disposition", "attachment; filename=plans.xls");
+		response.addHeader("content-Disposition", "attachment; filename=Plans.xls");
 		
 		List<CitizenPlan> plans = (List<CitizenPlan>) session.getAttribute("plans");
+		
+		if(plans == null || plans.isEmpty()){
+	        plans = service.search(new SearchRequest()); // load all records
+	    }
 		
 		service.exportExcel(response, plans);
 	}
@@ -67,9 +71,13 @@ public class CitizenController {
 	@GetMapping("/pdf")
 	public void pdfExport(HttpServletResponse response, HttpSession session) throws Exception {
 		response.setContentType("application/pdf");
-		response.addHeader("content-Disposition", "attachment; filename=plans.pdf");
+		response.addHeader("content-Disposition", "attachment; filename=Plans.pdf");
 		
 		List<CitizenPlan> plans = (List<CitizenPlan>) session.getAttribute("plans");
+		
+		if(plans == null || plans.isEmpty()){
+	        plans = service.search(new SearchRequest());
+	    }
 		
 		service.exportPdf(response, plans);
 	}
